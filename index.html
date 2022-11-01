@@ -45,18 +45,18 @@ textarea {
 	<title>計算機</title>
   </head>
   <body>
-	<main>
-		<h1>計算機</h1>
-		<textarea placeholder="式を入力" id="U" pattern="^[0123456789x\+\-\*\/\[\]]$"></textarea>
-		<p>結果 : <div id="m"></div></p>
-		<h2>これは何？</h2>
-		<p>1次式と定数の計算をするツールです。変数xと+-*/の四則演算がご利用いただけます。</p>
-		<p>また、絶対値関数の計算ができます。ただし|x|ではなく[x]と入力してください。</p>
-		<h2>注意</h2>
-		<p>小数はご利用いただけません。分数の使用をお願いします。ただし計算結果は分数ではなく小数が用いられます。</p>
-		<p>積は記号を省略しても構いません。</p>
-		<p>二次以上の式は計算できません。また、整式の除法はできません。</p>
-	</main>
+      <main>
+        <h1>計算機</h1>
+        <textarea placeholder="式を入力" id="userInput" pattern="^[0123456789x\+\-\*\/\[\]]$"></textarea>
+        <p>結果 : <div id="msb"></div></p>
+        <h2>これは何？</h2>
+        <p>2次以下の式の計算をするツールです。変数xと+-*/の四則演算がご利用いただけます。</p>
+        <p>また、絶対値関数の計算ができます。ただし|x|ではなく[x]と入力してください。</p>
+        <h2>注意</h2>
+        <p>小数はご利用いただけません。分数の使用をお願いします。ただし計算結果は分数ではなく小数が用いられます。</p>
+        <p>積は記号を省略しても構いません。</p>
+        <p>3次以上の式は計算できません。また、整式の除法はできません。</p>
+      </main>
 	
 		<script>
 onload=()=>{let e=e=>{let $=[];for(i=0;i<=e.length;i++){if("[(".includes(e[i])&&$.push(e[i]),"("===$[$.length-1]&&")"===e[i]&&$.pop(),"["===$[$.length-1]&&"]"===e[i]&&$.pop(),("+-*/".includes(e[i])||void 0===e[i])&&0===$.length)return i-1;if(")]".includes(e[i])&&0===$.length)return i}},$=e=>{let $=[];for(i=e.length-1;i>=-1;i--){if("])".includes(e[i])&&$.push(e[i]),")"===$[$.length-1]&&"("===e[i]&&$.pop(),"]"===$[$.length-1]&&"["===e[i]&&$.pop(),("+-*/".includes(e[i])||void 0===e[i])&&0===$.length)return i+1;if("([".includes(e[i])&&0===$.length)return i}},_=e=>"x"===e?{number:[[-1/0,[0,1,0]]]}:e.endsWith("x")?{number:[[-1/0,[0,Number(e.slice(0,-1)),0]]]}:{number:[[-1/0,[Number(e),0,0]]]},l=(e,_)=>{let l=e.slice(0,$(e));for(let t=l.length-1;0<=t;){if(l[t]===_)return t;")]".includes(l[t])&&(t=$(l.slice(0,t+1))),t--}return -1},t=e=>e.startsWith("(")&&e.endsWith(")")?r(e.slice(1,e.length-1)):e.startsWith("[")&&e.endsWith("]")?[r(e.slice(1,e.length-1)),"abs"]:[e],r=e=>{if(e.match(/0x\d/))return;if(0===$(e))return t(e);e.slice($(e));let _=Math.max(l(e,"+"),l(e,"-"));return(-1===_&&(_=Math.max(l(e,"*"),l(e,"/"))),-1===_)?[]:[r(e.slice(0,_)),e[_],r(e.slice(_+1))]},n=e=>{if(Array.isArray(e[0]))e[0]=n(e[0]);else if(Array.isArray(e[2]))e[2]=n(e[2]);else if("string"==typeof e[0])e[0]=_(e[0]);else if("string"==typeof e[2])e[2]=_(e[2]);else{if(1===e.length)return e[0];let $=[];for(let l=0;l<e[0].number.length;l++)$.push(e[0].number[l][0]);if(3===e.length)for(let t=0;t<e[2].number?.length;t++)$.push(e[2].number[t][0]);($=[...new Set($)]).sort((e,$)=>e-$);let r=[],s=0,u=0;for(let g=0;g<$.length;g++){let p=($,_)=>e[2*$].number[[s,u][$]][1][_];if("+"===e[1])r.push([$[g],[p(0,0)+p(1,0),p(0,1)+p(1,1),p(0,2)+p(1,2),]]);else if("-"===e[1])r.push([$[g],[p(0,0)-p(1,0),p(0,1)-p(1,1),p(0,2)-p(1,2),]]);else if("*"===e[1])r.push([$[g],[p(0,0)*p(1,0),p(0,1)*p(1,0)+p(0,0)*p(1,1),p(0,2)*p(1,0)+p(0,1)*p(1,1)+p(0,0)*p(1,2)]]);else if("/"===e[1]){if(0!==p(1,1)||0!==p(1,2)||0===p(1,0))throw 0;r.push([$[g],[p(0,0)/p(1,0),p(0,1)/p(1,0),p(0,2)/p(1,0),]])}else if("abs"===e[1]){let h=p(0,2),c=p(0,1),f=p(0,0),a=[];if(0===h)a=0===c?[]:[-f/c];else{let m=c**2-4*h*f;m<0&&(a=[]),0===m&&(a=[-c/(2*h)]),m>0&&(a=[(-c-Math.sqrt(m))/(2*h),(-c+Math.sqrt(m))/(2*h)])}a=a.filter(e=>$[g]<e&&e<($[g+1]??1/0));let o=(e,$)=>e===-1/0&&$===1/0?0:e===-1/0?$-1:$===1/0?e+1:(e+$)/2;if(0===a.length){let d=o($[g],$[g+1]??1/0),b=Math.sign(h*d**2+c*d+f);r.push([$[g],[b*f,b*c,b*h,]])}else if(1===a.length){let x=o($[g],a[0]),y=Math.sign(h*x**2+c*x+f),v=o(a[0],$[g+1]??1/0),I=Math.sign(h*v**2+c*v+f);r.push([$[g],[y*f,y*c,y*h,]],[a[0],[I*f,I*c,I*h,]])}else if(2===a.length){let W=o($[g],a[0]),E=Math.sign(h*W**2+c*W+f),L=o(a[0],a[1]),A=Math.sign(h*L**2+c*L+f),B=o(a[1],$[g+1]??1/0),H=Math.sign(h*B**2+c*B+f);r.push([$[g],[E*f,E*c,E*h,]],[a[0],[A*f,A*c,A*h,]],[a[1],[H*f,H*c,H*h,]])}}$[g+1]===(e[0].number[s+1]??[])[0]&&s++,$[g+1]===(e[2]?.number[u+1]??[])[0]&&u++}return{number:r}}return e},s=document.getElementById("msb");document.body.addEventListener("input",()=>{try{let _=document.getElementById("userInput").value;if(""===_&&(s.innerHTML=""),_=(_=(_=document.getElementById("userInput").value=_.replace(/[^0123456789x\+\-\*\/\[\]\(\)]*/g,"")).replace(/^([\+\-])/g,"0$1").replace(/([\(\[])([\+\-])/g,"$10$2")).replace(/(?<=[\d\)\]x])([\(\[x])/g,"*$1"),s.innerHTML="",void 0===$(_)||void 0===e(_))return;let l=r(_),t=[];for(let u=0;"string"!=typeof t&&(t=n(l),"object"!=typeof t||Array.isArray(t));u++)if(u>=100)return;let g=(e,$)=>t.number[e][1][$],p="";for(let h=1;h<t.number.length;h++)turningPoint=t.number[h][0],p+="("+(g(h,2)-g(h-1,2))/2+"x+"+((g(h,2)-g(h-1,2))*turningPoint+g(h,1)-g(h-1,1))/2+")[x+"+-turningPoint+"]+";p+="("+(g(0,2)+g(t.number.length-1,2))/2+")x\xb2+("+(g(0,1)+g(t.number.length-1,1))/2+")x+"+(g(0,0)+g(t.number.length-1,0))/2,p=(p=(p=p.replace(/\(0x\+/g,"(").replace(/\(1x/g,"(x").replace(/\+0\)/g,")").replace(/\((\-?[^\+\-]+)\)/g,"$1").replace(/0\[.+?\]/g,"").replace(/1\[/g,"[")).replace(/\[x\+\-/g,"[x-").replace(/\+0\]/g,"]")).replace(/\(([^\+]*)\)/g,"$1").replace(/0x²?\+/g,"").replace(/1x/g,"x").replace(/\+0$/,"").replace(/^\+/g,"").replace(/\+\-/g,"-"),""===p&&(p="0"),p.includes("NaN")&&(p=""),p=p.replace(/[\[\]]/g,"|"),s.innerHTML=p}catch(c){}})};
